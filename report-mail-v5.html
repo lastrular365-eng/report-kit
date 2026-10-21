@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReportKit – Telegram Report Email Generator</title>
+<style>
+:root{--bg:#f3f5fa;--card:#fff;--tx:#162033;--mu:#5f6b80;--ac:#2f6df6;--ac2:#6a4cf5;--bd:#e0e6f1;--in:#f7f9fd;--wn:#fff4e0;--wt:#8a4b00;--er:#d32f2f;--sh:0 4px 18px rgba(30,50,100,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0c121d;--card:#161e2d;--tx:#e9eef7;--mu:#95a2b8;--ac:#6592ff;--ac2:#8d77ff;--bd:#27324a;--in:#0f1624;--wn:#3a2b12;--wt:#ffc982;--er:#ff7b7b;--sh:none}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.55}
+.hero{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;padding:34px 16px 64px;text-align:center}
+.hero h1{margin:0 0 8px;font-size:1.7rem;letter-spacing:-.02em}
+.hero p{margin:0 auto;max-width:520px;opacity:.92;font-size:1rem}
+.logo{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.2);font-size:26px;margin-bottom:12px}
+.w{max-width:740px;margin:-42px auto 0;padding:0 12px 50px}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+.st{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.05rem;margin-bottom:14px}
+.num{width:28px;height:28px;border-radius:50%;background:var(--ac);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.9rem;flex:none}
+.g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.cat{display:flex;flex-direction:column;gap:6px;align-items:flex-start;border:1.5px solid var(--bd);background:var(--in);color:var(--tx);padding:13px 12px;border-radius:12px;cursor:pointer;font:inherit;font-size:.92rem;font-weight:600;text-align:left;transition:.15s}
+.cat .ic{font-size:1.4rem}
+.cat:hover{border-color:var(--ac)}
+.cat.on{border-color:var(--ac);background:rgba(47,109,246,.1);box-shadow:0 0 0 2px var(--ac) inset}
+.info{margin-top:14px;font-size:.88rem;color:var(--mu);background:var(--in);border:1px solid var(--bd);border-radius:12px;padding:12px 14px}
+.info div{margin:3px 0}
+.info b{color:var(--tx)}
+.info a{color:var(--ac)}
+label{display:block;font-size:.83rem;font-weight:600;color:var(--mu);margin:14px 0 5px}
+input[type=text],textarea{width:100%;padding:12px;border:1.5px solid var(--bd);border-radius:10px;background:var(--in);color:var(--tx);font:inherit;font-size:16px;outline:none}
+input[type=text]:focus,textarea:focus{border-color:var(--ac)}
+input.bad{border-color:var(--er)}
+textarea{min-height:440px;resize:vertical;line-height:1.5}
+.err{color:var(--er);font-size:.85rem;margin-top:5px;display:none}
+.wn{background:var(--wn);color:var(--wt);padding:11px 13px;border-radius:10px;font-size:.88rem;margin-top:14px;display:none}
+.mail{border:1.5px solid var(--bd);border-radius:12px;overflow:hidden}
+.mh{background:var(--in);padding:4px 12px 10px;border-bottom:1px solid var(--bd)}
+.mh label{margin:8px 0 3px}
+.mh input{padding:9px 10px}
+.mb{padding:0}
+.mb textarea{border:0;border-radius:0;background:var(--card)}
+.ck{display:flex;gap:10px;align-items:flex-start;margin:16px 0 0;font-size:.92rem;font-weight:500;color:var(--tx)}
+.ck input{margin-top:3px;width:20px;height:20px;flex:none;accent-color:var(--ac)}
+.b{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+button.p,button.q{padding:15px 16px;border-radius:12px;border:1.5px solid var(--ac);font:inherit;font-size:1rem;font-weight:700;cursor:pointer;flex:1 1 180px}
+button.p{background:linear-gradient(135deg,var(--ac),var(--ac2));border-color:transparent;color:#fff;flex-basis:100%}
+button.p:disabled{opacity:.4;cursor:not-allowed}
+button.q{background:transparent;color:var(--ac)}
+.n{font-size:.8rem;color:var(--mu);margin-top:12px}
+.ok{display:none;margin-top:14px;padding:12px 14px;border-radius:10px;background:rgba(47,109,246,.1);font-size:.9rem}
+.ft{text-align:center;font-size:.78rem;color:var(--mu);margin-top:8px}
+@media(max-width:480px){.hero h1{font-size:1.4rem}.g{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header class="hero">
+<div class="logo">🛡️</div>
+<h1>ReportKit</h1>
+<p>Generate a ready-to-send Telegram report email in seconds. Pick a category, add the link, and open it in Gmail.</p>
+</header>
+
+<div class="w">
+<div class="c">
+<div class="st"><span class="num">1</span>Choose what you are reporting</div>
+<div class="g" id="cats"></div>
+<div class="info" id="info"></div>
+</div>
+
+<div class="c">
+<div class="st"><span class="num">2</span>Add the details</div>
+<label for="target">Group / channel / account link or @username *</label>
+<input type="text" id="target" placeholder="https://t.me/example or @example" autocomplete="off">
+<div class="err" id="terr">Please enter a valid link or @username (e.g. https://t.me/example or @example).</div>
+<label for="proof" id="plabel">Reference links (optional)</label>
+<input type="text" id="proof" placeholder="e.g. https://t.me/example/123" autocomplete="off">
+<label for="extra">What is happening? (optional, short)</label>
+<input type="text" id="extra" placeholder="e.g. asking users to send money for a fake giveaway" autocomplete="off">
+<label for="name">Your name (optional)</label>
+<input type="text" id="name" placeholder="Your name" autocomplete="off">
+<label class="ck" id="aul"><input type="checkbox" id="au"><span>I am also filing this report with the official authorities listed above (adds a line to the email).</span></label>
+<div class="wn" id="warn"></div>
+</div>
+
+<div class="c">
+<div class="st"><span class="num">3</span>Review your email</div>
+<div class="mail">
+<div class="mh">
+<label for="to">To</label><input type="text" id="to">
+<label for="cc">CC</label><input type="text" id="cc" placeholder="optional">
+<label for="sub">Subject</label><input type="text" id="sub">
+</div>
+<div class="mb"><textarea id="body" aria-label="Message"></textarea></div>
+</div>
+<label class="ck"><input type="checkbox" id="ck"><span>I confirm that this report is truthful and accurate to the best of my knowledge.</span></label>
+<div class="b">
+<button class="p" id="sb" disabled>Submit &amp; open in Gmail</button>
+<button class="q" id="gw">Open Gmail website</button>
+<button class="q" id="mt">Open default mail app</button>
+<button class="q" id="cp">Copy message</button>
+</div>
+<div class="ok" id="ok">Your email draft is ready. Attach your screenshots in Gmail, then press <b>Send</b>. If nothing opened, try one of the other buttons.</div>
+<div class="n">The email is not sent automatically. It opens as a draft in Gmail and you press Send yourself.</div>
+</div>
+<div class="ft">Only submit genuine reports. Law references are for context and are not legal advice.</div>
+</div>
+
+<script>
+var AB="abuse@telegram.org";
+var CATS=[
+{k:"Child Abuse / CSAM",ic:"🚫",to:"stopCA@telegram.org",cc:AB,law:"POCSO Act, 2012; IT Act, Section 67B",
+ ex:'Also report in India at <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>.',
+ warn:"Never download, screenshot or forward this kind of content. Share only the link.",pl:"Channel / message links (links only, never the content)",
+ s:"URGENT: Child sexual abuse material (CSAM) reported - {T}", b:0},
+{k:"Violence / Terrorism",ic:"⚠️",to:AB,law:"BNS, 2023; UAPA, 1967 (where applicable)",
+ ex:"If someone is in immediate danger, call your local emergency number (112 in India).",warn:"",pl:"Links to messages showing violence or threats",
+ s:"Report of violent / terrorist content - {T}", b:0},
+{k:"Illegal Goods / Services",ic:"📦",to:AB,law:"Relevant special laws; BNS (where applicable)",
+ ex:"",warn:"",pl:"Links to posts selling the goods or services",
+ s:"Report of illegal goods/services being sold - {T}", b:0},
+{k:"Illegal Adult Content",ic:"🔞",to:AB,law:"IT Act; BNS (where applicable)",
+ ex:'If private images were shared without consent, also file a complaint at <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a>.',warn:"",pl:"Links to the messages containing the content",
+ s:"Report of illegal adult / non-consensual content - {T}", b:0},
+{k:"Personal Data Leak / Doxxing",ic:"🔓",to:AB,law:"IT Act; applicable data-protection laws",
+ ex:"",warn:"Do not repeat anyone's personal details (phone, address, ID) in this email. Share only the message link.",pl:"Links to messages where the data was posted",
+ s:"Report of personal data leak / doxxing - {T}", b:0},
+{k:"Scam / Fraud",ic:"💸",to:AB,law:"BNS, 2023; IT Act (where applicable)",
+ ex:'You can also report to the <a href="https://t.me/NoToScam" target="_blank" rel="noopener">@NoToScam</a> bot. If you lost money, call <b>1930</b> or file at <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">cybercrime.gov.in</a> right away.',
+ warn:"",pl:"Message links or payment details (if any)",
+ s:"Report of scam / fraud - {T}", b:0},
+{k:"Copyright Infringement",ic:"©️",to:"dmca@telegram.org",law:"Copyright Act, 1957",
+ ex:"This notice should be sent by the rights holder or an authorised agent.",warn:"Include a link or proof of your original work, otherwise the report may be rejected.",pl:"Link to your original work / proof of ownership",
+ s:"Copyright infringement notice - {T}", b:0},
+{k:"Spam / Phishing",ic:"🎣",to:AB,cc:"incident@cert-in.org.in",law:"IT Act; BNS (where applicable)",
+ ex:'For account restrictions on your own account, use <a href="https://t.me/SpamBot" target="_blank" rel="noopener">@SpamBot</a>.',
+ warn:"",pl:"Link to the spam message or phishing link",
+ s:"Report of spam / phishing - {T}", b:0}
+];
+var LONG=[
+{i:"I am writing to urgently report content on Telegram that appears to depict the sexual abuse or exploitation of children. I am bringing it to your attention so that it can be reviewed and removed as quickly as possible.",
+d:["While using Telegram, I came across the account/group/channel identified above, which appears to host or share child sexual abuse material (CSAM). I did not look for this content with any intent to view it, and I have not downloaded, saved, copied or forwarded any of it.","Material of this kind causes severe and lasting harm to the children involved, and every additional day it remains available increases that harm."],
+v:"The content described is illegal under the Protection of Children from Sexual Offences (POCSO) Act, 2012 and Section 67B of the Information Technology Act, 2000 in India. It is also strictly prohibited by Telegram's Terms of Service and by the laws of nearly every country.",
+r:["Review the reported account/group/channel and the linked messages on an urgent basis.","Remove all child abuse material and permanently ban the accounts responsible for sharing it.","Preserve the relevant data and report it to the appropriate child-protection authorities, as required by law.","Check for related or mirror channels run by the same users."],
+at:"For legal and safety reasons, no copy or screenshot of the material is attached. The link(s) above should be enough to locate it."},
+{i:"I am writing to report a channel/group/account on Telegram that promotes violence, threatens people or supports terrorism.",
+d:["The account/group/channel identified above is being used to share content that glorifies or encourages violent acts, threatens individuals or communities, and/or promotes extremist or terrorist organisations. The content is publicly accessible and can be seen and spread by other users.","Such material can incite real-world harm, radicalise vulnerable people and put individuals at risk of serious injury."],
+v:"This activity is punishable under the Bharatiya Nyaya Sanhita (BNS), 2023 and, where applicable, the Unlawful Activities (Prevention) Act (UAPA), 1967. It also violates Telegram's Terms of Service, which do not allow the promotion of violence on publicly viewable channels.",
+r:["Review the reported account/group/channel and the linked messages as a priority.","Remove the violent or terrorist content and ban or restrict the responsible accounts.","Take steps to stop the content from being re-shared through related channels."]},
+{i:"I am writing to report a channel/group/account on Telegram that openly offers illegal goods or services for sale.",
+d:["The account/group/channel identified above advertises prohibited items or unlawful services and invites users to contact the seller or place orders. The offers are posted publicly and are visible to any user who finds the channel.","Such marketplaces expose buyers to fraud and serious harm, and they enable unlawful trade."],
+v:"The activity appears to violate relevant special laws and, where applicable, the Bharatiya Nyaya Sanhita (BNS), 2023. It also violates Telegram's Terms of Service.",
+r:["Review the reported account/group/channel and the linked posts.","Remove the illegal listings and ban or restrict the account(s) behind them.","Prevent the same sellers from returning through new channels."]},
+{i:"I am writing to report a channel/group/account on Telegram that distributes illegal adult content, including material that may have been shared without the consent of the people shown.",
+d:["The account/group/channel identified above publicly shares explicit material that appears to be unlawful, which may include intimate images or videos recorded or distributed without the consent of those depicted.","Non-consensual intimate content causes serious emotional, social and professional harm to victims, and it spreads quickly once shared in groups."],
+v:"Publishing or transmitting such material is an offence under the Information Technology Act, 2000 and, where applicable, the Bharatiya Nyaya Sanhita (BNS), 2023. It also violates Telegram's Terms of Service.",
+r:["Review the linked content and the reported account/group/channel.","Remove the illegal material and ban or restrict the responsible account(s).","Take steps to prevent the same content from being re-uploaded."]},
+{i:"I am writing to report a channel/group/account on Telegram that publishes private personal information about individuals without their consent (doxxing).",
+d:["The account/group/channel identified above has posted personal details of one or more people, such as contact information, addresses, identity documents or other private data, without their permission. I have deliberately not repeated that information in this email and have only provided links to the relevant posts.","Publishing private data exposes people to harassment, stalking, fraud and physical danger."],
+v:"This is a serious violation of privacy and may contravene the Information Technology Act, 2000 and applicable data-protection laws. It also violates Telegram's Terms of Service.",
+r:["Remove the posts containing the personal information.","Take action against the account(s) responsible, including restriction or a ban.","Prevent the same data from being re-posted."],
+at:"I can provide screenshots on request, but have not attached them in order to avoid spreading the personal data any further."},
+{i:"I am writing to report a scam being run through Telegram, which is misleading users and causing, or is likely to cause, financial loss.",
+d:["The account/group/channel identified above promotes a fraudulent scheme and asks users to send money, share payment details or provide personal information in return for promised benefits that do not exist. The messages appear designed to create false trust or urgency so that people act before verifying anything.","Victims of such schemes often lose their savings, and the scheme will keep reaching new users for as long as the account stays active."],
+v:"This activity is punishable under the Bharatiya Nyaya Sanhita (BNS), 2023 and, where applicable, the Information Technology Act, 2000. It also violates Telegram's Terms of Service.",
+r:["Review the account/group/channel and the linked messages.","Remove the fraudulent content and ban or restrict the account(s).","Take action against related accounts and channels connected to this scheme."]},
+{g:"Dear Telegram DMCA Team,",i:"I am writing to submit a copyright infringement notice regarding content shared on Telegram without the permission of the copyright owner.",
+d:["The channel/group/link identified above distributes or makes available material that is protected by copyright, without authorisation from the rights holder. The reference details in this email identify the infringing material and the original work.","Unauthorised distribution deprives the creator or rights holder of control over the work and of the income it generates."],
+v:"This use infringes rights protected under the Copyright Act, 1957. I have a good-faith belief that the use described is not authorised by the copyright owner, its agent or the law. I state that the information in this notice is accurate and that I am the rights holder or am authorised to act on the rights holder's behalf.",
+r:["Remove or disable access to the infringing content identified above.","Take action against repeat infringers in line with your policies.","Confirm once the content has been removed."],
+at:"A link to, or proof of my ownership of, the original work is included in the reference details above."},
+{i:"I am writing to report spam and/or phishing activity on Telegram that is targeting users.",
+d:["The account/group/channel identified above sends unsolicited bulk messages and/or links that appear designed to steal login credentials, payment details or other personal data, or to trick users into installing harmful software.","Phishing links can lead to account takeovers and financial loss, and the volume of messages makes it likely that many users are being affected."],
+v:"This may be an offence under the Information Technology Act, 2000 and, where applicable, the Bharatiya Nyaya Sanhita (BNS), 2023, and it violates Telegram's Terms of Service.",
+r:["Review the account/group/channel and the linked messages.","Remove the spam or phishing content and ban or restrict the responsible account(s).","Block the malicious links wherever possible."]}
+];
+var AU=[
+[{n:"NCPCR",u:"https://ncpcr.gov.in"},{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"},{n:"Childline 1098 (phone)"}],
+[{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"},{n:"Emergency helpline 112 (phone)"}],
+[{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"}],
+[{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"},{n:"StopNCII.org",u:"https://stopncii.org"}],
+[{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"}],
+[{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"},{n:"Cyber fraud helpline 1930 (phone)"}],
+[],
+[{n:"CERT-In"},{n:"National Cyber Crime Reporting Portal",u:"https://cybercrime.gov.in"}]
+];
+var cur=0,$=function(i){return document.getElementById(i)};
+var box=$("cats");
+CATS.forEach(function(c,i){var b=document.createElement("button");b.className="cat"+(i===0?" on":"");b.innerHTML='<span class="ic">'+c.ic+'</span>'+c.k;b.onclick=function(){cur=i;[].forEach.call(box.children,function(x,j){x.className="cat"+(j===i?" on":"")});fill()};box.appendChild(b)});
+function fill(){
+var c=CATS[cur],t=$("target").value.trim()||"[link/username here]",x=$("extra").value.trim(),p=$("proof").value.trim(),n=$("name").value.trim();
+$("plabel").textContent=c.pl+" (optional)";
+$("info").innerHTML="<div><b>Legal reference:</b> "+c.law+"</div><div><b>Sent to:</b> "+c.to+(c.cc?" + "+c.cc+" (CC)":"")+"</div>"+(AU[cur].length?"<div><b>Official authorities:</b> "+AU[cur].map(function(a){return a.u?'<a href="'+a.u+'" target="_blank" rel="noopener">'+a.n+"</a>":a.n}).join(" · ")+"</div>":"")+(c.ex?"<div>"+c.ex+"</div>":"");
+$("aul").style.display=AU[cur].length?"flex":"none";
+var w=$("warn");w.style.display=c.warn?"block":"none";w.textContent="⚠️ "+c.warn;
+$("to").value=c.to;$("cc").value=c.cc||"";
+$("sub").value=c.s.replace("{T}",t)+" | Permanent ban requested";
+var L=LONG[cur],dt=new Date().toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"});
+var det=["- Platform: Telegram","- Category: "+c.k,"- Reported account/group/channel: "+t];
+if(p)det.push("- Reference link(s): "+p);
+det.push("- Date of report: "+dt);if(n)det.push("- Reported by: "+n);
+var b=[L.g||"Dear Telegram Abuse Team,",L.i,"REQUEST FOR PERMANENT BAN\nI request the immediate and permanent ban of the reported account/group/channel ("+t+"), together with all related or linked accounts and the removal of all content shared through them.","REPORT DETAILS\n"+det.join("\n"),"DESCRIPTION OF THE ISSUE\n"+L.d.join("\n\n")+(x?"\n\nAdditional details from my own observation: "+x+".":""),"VIOLATION AND LEGAL BASIS\n"+L.v+"\nRelevant provisions: "+c.law+".","ACTION REQUESTED\n"+["Permanently ban the reported account/group/channel and any linked or duplicate accounts."].concat(L.r).map(function(r,i){return (i+1)+". "+r}).join("\n"),($("au").checked&&AU[cur].length?"I am also reporting this matter to the relevant authorities ("+AU[cur].map(function(a){return a.n}).join(", ")+").":""),L.at||"Screenshots of the content are attached to this email for your reference.","I am happy to provide any further information that may help your review. Thank you for your time and for helping keep Telegram safe.\n\nSincerely,"+(n?"\n"+n:"")].filter(Boolean).join("\n\n");
+$("body").value=b;
+}
+["target","proof","extra","name"].forEach(function(i){$(i).oninput=function(){$("terr").style.display="none";$("target").className="";fill()}});
+$("au").onchange=fill;
+$("ck").onchange=function(){$("sb").disabled=!$("ck").checked};
+function valid(){
+var v=$("target").value.trim(),ok=/^@[A-Za-z0-9_]{4,}$|t\.me\/|telegram\.(me|dog)\/|^https?:\/\//i.test(v);
+if(!ok){$("terr").style.display="block";$("target").className="bad";$("target").scrollIntoView({behavior:"smooth",block:"center"});$("target").focus()}
+return ok;
+}
+function enc(){return{to:encodeURIComponent($("to").value.trim()),cc:encodeURIComponent($("cc").value.trim()),su:encodeURIComponent($("sub").value),b:encodeURIComponent($("body").value)}}
+function webUrl(e){return "https://mail.google.com/mail/?view=cm&fs=1&to="+e.to+(e.cc?"&cc="+e.cc:"")+"&su="+e.su+"&body="+e.b}
+function mtUrl(e){return "mailto:"+e.to+"?subject="+e.su+"&body="+e.b+(e.cc?"&cc="+e.cc:"")}
+function done(){$("ok").style.display="block"}
+$("sb").onclick=function(){
+if(!valid())return;
+var e=enc(),ua=navigator.userAgent,ios=/iPhone|iPad|iPod/i.test(ua),and=/Android/i.test(ua);
+if(ios){
+window.location.href="googlegmail:///co?to="+e.to+(e.cc?"&cc="+e.cc:"")+"&subject="+e.su+"&body="+e.b;
+setTimeout(function(){if(!document.hidden)window.open(webUrl(e),"_blank")},1500);
+}else if(and){window.location.href=mtUrl(e)}
+else{window.open(webUrl(e),"_blank")}
+done();
+};
+$("gw").onclick=function(){if(!valid())return;window.open(webUrl(enc()),"_blank");done()};
+$("mt").onclick=function(){if(!valid())return;window.location.href=mtUrl(enc());done()};
+$("cp").onclick=function(){
+var t=$("body");t.select();
+try{navigator.clipboard.writeText(t.value)}catch(e){document.execCommand("copy")}
+$("cp").textContent="Copied ✓";setTimeout(function(){$("cp").textContent="Copy message"},1500);
+};
+fill();
+</script>
+</body>
+</html>
